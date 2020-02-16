@@ -1,7 +1,7 @@
 import sys
 import pygame
 import time
-
+from snake import Snake
 
 def drawButton(surface, x, y, pictureFile):
     image = pygame.image.load(pictureFile)
@@ -30,7 +30,7 @@ green = 102, 255, 51
 # 0 - menu, 1 - game started
 gameState = 0
 
-# Snake speed 1-5, multiplication of 80ms, time before rendering next frame
+# Snake speed 1-5, multiplication of 40ms, time before rendering next frame
 delay = 3
 
 buttonEvents = []
@@ -42,6 +42,9 @@ pygame.font.init()
 size = width, height = 800, 600
 screen = pygame.display.set_mode(size)
 myfont = pygame.font.SysFont('Arial', 60)
+blockSize = 25
+
+snake = Snake(screen, width/blockSize - 1, height/blockSize - 1, blockSize)
 
 while 1:
     for event in pygame.event.get():
@@ -49,11 +52,11 @@ while 1:
             sys.exit()
 
     screen.fill(yellow)
-    buttonEvents = pygame.key.get_pressed()
 
     if gameState == 0:
         if drawButton(screen, 250, 200, "startButton.png") == True:
             gameState = 1
+
 
         if drawButton(screen, 250, 320, "minusButton.png") == True:
             if minusPreviousState == False:
@@ -76,6 +79,20 @@ while 1:
         time.sleep(0.05)
 
     if gameState == 1:
-        
+        buttonEvents = pygame.key.get_pressed()
+        if buttonEvents[pygame.K_DOWN]:
+            snake.nextMove("down")
+        if buttonEvents[pygame.K_UP]:
+            snake.nextMove("up")
+        if buttonEvents[pygame.K_LEFT]:
+            snake.nextMove("left")
+        if buttonEvents[pygame.K_RIGHT]:
+            snake.nextMove("right")
+        snake.move()
+        snake.draw()
+        if snake.colisionCheck():
+            gameState = 0
+            del snake
+            snake = Snake(screen, width/blockSize - 1, height/blockSize - 1, blockSize)
         pygame.display.flip()
-        time.sleep(0.08 * delay)
+        time.sleep(0.04 * delay)
