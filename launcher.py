@@ -21,7 +21,7 @@ def drawButton(surface, x, y, pictureFile):
 def drawNumber(surface, font, x, y, number):
     text = font.render(str(number), False, (0,0,0))
     textSize = font.size(str(number))
-    surface.blit(text, (x-(textSize[0]/2), y-(textSize[1]/2)))
+    surface.blit(text, (int(x-(textSize[0]/2)), int(y-(textSize[1]/2))))
 
 
 yellow = 255, 255, 102
@@ -72,10 +72,10 @@ while 1:
             plusPreviousState = False
 
         drawNumber(screen, myfont, 400, 360, 6-delay)
+        pygame.display.flip()
         time.sleep(0.05)
 
     if gameState == 1:
         
+        pygame.display.flip()
         time.sleep(0.08 * delay)
-
-    pygame.display.flip()
